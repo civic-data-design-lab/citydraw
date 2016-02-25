@@ -7,7 +7,7 @@ var myCities = [  //NAME AND BOUNDS OF CITIES
 ]
 ,tblName = "twin_cities_hoods" // cartoDB table name
 ,usrName = "mjfoster83" // your cartoDB username
-,brandText = "Map your Neighborhood, Twin Cities!" // top left text and link on site
+,brandText = "Draw your City" // top left text and link on site
 ,brandLink = "http://maps.graphicarto.com/twincityhoods" //top left link on site
 ,giturl = "https://github.com/enam/neighborhoods" //Only change this if you want to link to a fork you made, otherwise you can leave the link to the original repo
 ,twiturl = "https://twitter.com/mjfoster83" //Links to my twit acct, change it if you want or remove twitter link altogether
@@ -85,7 +85,7 @@ function go(){
   overlg.addTo(map);
   toner.addTo(map);
   map.fitBounds(selectedCity.bnds);
-  map.setView([44.982125, -93.269013],13)
+  map.setView([42.359289, -71.093392],13)
 
   //draw controls
   drawnItems = new L.FeatureGroup();

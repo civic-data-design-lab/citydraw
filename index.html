@@ -9,6 +9,7 @@
   <meta name="description" content="Crowdsourced mapping of neighborhoods in Greater Minneapolis/St. Paul" />
 
   <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
+  <link href="css/simple-sidebar.css" rel="stylesheet">
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
   <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
@@ -16,7 +17,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="libs/leaflet.draw/leaflet.draw.css" />
   <!--[if lte IE 8]><link rel="stylesheet" href="libsLeaflet.draw/leaflet.draw.ie.css" /><![endif]-->
-  <link rel="stylesheet" href="css/hoodstyles.css">
+  <link rel="stylesheet" href="css/main.css">
   <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script>alert('This site may not work in your browser! OH NO!')</script>
@@ -46,7 +47,7 @@
     <div class="modal-content">
              <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Mapping the neighborhoods of the Twin Cities</h3>
+        <h3 id="myModalLabel">Draw your City</h3>
       </div>
              <div class="modal-body">
               <h4>Visualizing a city of neighborhoods.</h4>
@@ -186,6 +187,37 @@
 
 <div id="map"></div>
 
+<div id="sidebar-wrapper">
+	<ul class="sidebar-nav">
+		<li class="sidebar-brand">
+			<a href="#">
+				Draw Your City!
+			</a>
+		</li>
+		<li>
+			<a href="#">Dashboard</a>
+		</li>
+		<li>
+			<a href="#">Shortcuts</a>
+		</li>
+		<li>
+			<a href="#">Overview</a>
+		</li>
+		<li>
+			<a href="#">Events</a>
+		</li>
+		<li>
+			<a href="#">About</a>
+		</li>
+		<li>
+			<a href="#">Services</a>
+		</li>
+		<li>
+			<a href="#">Contact</a>
+		</li>
+	</ul>
+</div>
+
 <div id="mapmaker">
   <div  id="btnBar" class="noMouse">
     <button id="startPolyBtn" class="btn btn-default yesMouse" type="button"> <i class="glyphicon glyphicon-pencil icon-white"> </i> Draw a neighborhood SHAPE</button>
@@ -224,7 +256,7 @@
                 <!--<li><a href="#contact">Contact</a></li>-->
                 <li style="top:-9px;position:relative"><h3 class="navText">}</h3></li>
                 
-                <!--CITY BUTTONS CREATED IN hoodscript.js -->
+                <!--CITY BUTTONS CREATED IN app.js -->
            </ul>
 <!--            <form class="navbar-right" role="search">
               <div id="the-basics" style="margin-right: 16px; margin-top: 10px; border-radius: 4px">
@@ -253,7 +285,7 @@
   <script src="bower_components/leaflet.freedraw/dist/leaflet.freedraw-src.js"></script>
   <script src="libs/Leaflet.Editable.js"></script>
   <script src="js/names.js"></script>
-  <script src="js/hoodscript.js"></script>
+  <script src="js/app.js"></script>
   <script src="js/googleanalytics.js"></script>
   
 
