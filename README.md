@@ -1,10 +1,9 @@
-#neighborhoods
+#citydraw
 
-http://bostonography.com/hoods
+http://citydraw.mitcivicdata.webfactional.com
 
-This is a Boston-flavored version of https://github.com/enam/neighborhoods. It's set up the same way as in the instructions below. Apart from some hard-coded titles and text for Boston, a key difference between this project and the original is in its drawing tools. This project uses a combination of [Leaflet.editable](https://github.com/yohanboniface/Leaflet.Editable) and a messy hacked-up version of [Leaflet.FreeDraw](https://github.com/Wildhoney/Leaflet.FreeDraw).
+This project uses a combination of [Leaflet.editable](https://github.com/yohanboniface/Leaflet.Editable) and a messy hacked-up version of [Leaflet.FreeDraw](https://github.com/Wildhoney/Leaflet.FreeDraw).
 
-See more about this particular project at http://bostonography.com/2015/map-your-neighborhood-again/
 
 * * *
 *original README from https://github.com/enam/neighborhoods below*
@@ -37,6 +36,11 @@ This project is designed to collect boundaries and descriptions of neighborhoods
 5. [Slim Scroll](http://rocha.la/jQuery-slimScroll/)
 6. Whole project was inspired by [Bostonography](http://bostonography.com/2012/crowdsourced-neighborhood-boundaries-part-one-consensus/).
 
-###author
+###authors
 * [Nick Martinelli](https://twitter.com/nichom)
 Please contact me if you do make use, or improve the code, because there is a lot that could use improving, and I would love any tips! I'd also really enjoy seeing what people do.
+
+* [Andy Woodruff](https://twitter.com/awoodruff)
+
+* [Mike Foster](https://twitter.com/mjfoster83)
+
