@@ -1,295 +1,329 @@
-<!doctype html>
-
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=0">
-
-  <title>Map your Neighborhood, Twin Cities!</title>
-  <meta name="description" content="Crowdsourced mapping of neighborhoods in Greater Minneapolis/St. Paul" />
-
-  <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
-  <link href="css/simple-sidebar.css" rel="stylesheet">
-  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
-  <!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
-  <![endif]-->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="libs/leaflet.draw/leaflet.draw.css" />
-  <!--[if lte IE 8]><link rel="stylesheet" href="libsLeaflet.draw/leaflet.draw.ie.css" /><![endif]-->
-  <link rel="stylesheet" href="css/main.css">
-  <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <script>alert('This site may not work in your browser! OH NO!')</script>
-  <![endif]-->
-</head>
-
-<body>
-  <!-- GENERAL MODAL****************************************************************-->
-<div id="generalModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-         <div class="modal-dialog">
-    <div class="modal-content">
-             <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Hey hey!</h3>
+<!DOCTYPE html>
+<!--Based on https://github.com/mjfoster83/web-map-workshop/blob/master/7_advancedMapping_CartoDB/index-completed.html-->
+<html>
+  <head>
+    <title>Leaflet to CartoDB - Point Collection Tool Beta</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+    <div id="wrapper">
+            <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Draw your City
+                    </a>
+                </li>
+				<li><a href="#">Add your Home</a><li><input type="text" name="FirstName" value="Home Address"></li></li>
+				<li><a href="#">Add your Work</a>
+				<li><input type="text" name="FirstName" value="Work Address"></li></li>
+				<li><a href="#">Drawing Tools</a>
+				<ul>
+				<li><a href="#" onclick="drawMarker()" value="Click to Start Editing">Draw Marker</a></li>
+				<li><a href="#" onclick="drawLine()" value="Click to Start Editing">Draw Path</a></li>
+				<li><a href="#" onclick="drawPolygon()" value="Click to Start Editing">Draw Polygon</a></li>
+				</ul>
+				</li>
+<!-- 
+				<li>
+					<div id="btnBar" class="noMouse">
+						<div id="startPolyBtn" class="yesMouse"><i class="glyphicon glyphicon-pencil icon-white"></i>Draw a Polygon</div>
+						<div id="startMarkerBtn" class="yesMouse"><i class="glyphicon glyphicon-pushpin icon-white"></i>Mark a Point</div>
+						<div id="deletePolyBtn" style:""  class="btn btn-default  yesMouse" type="button"> <i class="glyphicon glyphicon-trash icon-white"> </i> Cancel</div>
+						<div id="submitPolyBtn" style="display:none;" class="btn btn-default btn-success  yesMouse" type="button">Save Neighborhood</div>
+					</div>
+				</li>
+ -->
+                <li>
+			<a href="#">Basemap Layers</a>
+			<ul>
+				<li id="addStreets"><a href="#">Streets</a></li>
+				<li id="addBuildings"><a href="#">Buildings</a></li>
+				<li id="addWaterbody"><a href="#">Waterbodies</a></li>
+				</li>
+			</ul>
+            </ul>
+        </div>
+      <div id="header">
+        <h1>Leaflet Draw  Collection Tool</h1>
       </div>
-            <div class="modal-body">
-            </div>
-        <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">OK</button>
+      <div id="map"></div>
+      <div id="controls">
+        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+        <div id="credits"><p>&copy;2015, Mike Foster and Raphael Dumas</p></div>
       </div>
-           </div>
-  </div>
- </div>
-<!-- INFO MODAL****************************************************************-->
-<div id="aboutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-         <div class="modal-dialog">
-    <div class="modal-content">
-             <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Draw your City</h3>
-      </div>
-             <div class="modal-body">
-              <h4>Visualizing a city of neighborhoods.</h4>
-        <p>Minneapolis, St. Paul, and the surrounding suburbs are full of distinctive neighborhoods and communities. While administrative boundaries exist, their extents and boundaries are open to interpretation. The goal of this site is to <b>collectively map the diverse and unique neighborhoods of the Twin Cities of Minneapolis and St. Paul</b>, creating an image of the city in maps and words.</p>
-        <p> No neighborhood names or boundaries are here to start with. <b>You make the map</b>. Real or imagined,
-                 within a city, or crossing municipal borders. Names, extents, and descriptions are up to you. After mapping, be sure to <b>View Maps</b> to see other people's contributions.</p>
-                 <h4>What is your neighborhood?</h4>
-                 <p><a href="http://www.graphicarto.com/mapping-twin-cities-neighborhoods/">Read more about the project <i class="fa fa-external-link"></i></a></p>
-        <p><small>This is a project by <a href="http://twitter.com/mjfoster83">Mike Foster</a>, developed and inspired by similar projects mapping the urban landscape in <a href="http://pnwmaps.com/neighborhoods/">Portland</a> by <a href="https://twitter.com/nichom">Nick Martinelli</a> and of <a href="http://bostonography.com/hoods/">Boston</a> by <a href="http://bostonography.com" target="_blank">Bostonography.</a></small></p>
-        <!--p><b>NEW download a shapefile of the data contributed so far, or get the source code!</b> Check the buttons in the bottom right.</p>
-        <p> <b>- Thanks!</b> </p-->
-      </div>
-        <div class="modal-footer">
-        <!--button class="btn" id="modalInfoBtn">More Info Here</button-->
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Start Mapping!</button>
-      </div>
-           </div>
-  </div>
- </div>
-<!--END MODAL-->
-<!--flag modal-->
-<div id="flagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-    <div class="modal-content">
-             <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Flagging</h3>
-      </div>
-      <div class="modal-body">
-        <p><b>Please don't flag a neighborhood if you simply disagree with the border or description.</b>.</p>
-        <p> Only flag content that is offensive or just rubbish. Flagged content will be temporarily removed. 
-          Once reviewed it will either be reinstated if found to be flagged in error, or remain hidden if
-          found to be junk. Thanks!</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-danger" id="flagBtn" >No Really, Flag It!</button>
-        <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Never Mind</button>
-      </div>
-           </div>
-  </div>
- </div>
-<!--END MODAL-->
-<!-- SUBMIT MODAL ***********************************************************************-->
-<div id="submitModal"  class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Just a few more things</h3>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" style="margin-bottom:0px"> 
-          <div id="alertHolder2"></div> 
-          <!--neighborhood name-->
-          <div class="form-group">
-            <label for="neighborhoodName" class="col-xs-4 control-label">Neighborhood Name <br><span style="color:#FF0000;font-weight:normal;font-style:italic;">*Required</span></label>
-            <div class="col-xs-8">
-              <input class="form-control typeahead noEnterSubmit neighborhoodName" id="neighborhoodName" autocomplete="off" data-provide="typeahead">
-               </div>
-          </div> 
-          <div class="form-group">
-            <label for="cityName" class="col-xs-4 control-label">City/Town Name</label>
-            <div class="col-xs-8">
-              <input class="form-control typeahead noEnterSubmit cityName" id="cityName" autocomplete="off" data-provide="typeahead">
-               </div>
-          </div>
-          <!--location toggle-->
-          <!-- **disableing location didn't get a lot of love**
-          <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-8">
-              <div class="checkbox">
-              <label>
-                <input type="checkbox" checked="checked"> Enable Location
-              </label>
-            </div>
-            </div>
-          </div>
-        -->
-          <!--years in city-->  
-          <div class="form-group"> 
-            <label  class="col-xs-4 control-label" >How many years have you lived in this city/town?</label>
-              <div id="cityLivingGroup" class="btn-group cty-group col-xs-8">
-                <button type="button" class="btn btn-default" name="0">Never</button>
-                <button type="button" class="btn btn-default" name="1">&lt; 1</button>
-                <button type="button" class="btn btn-default" name="2">1-5</button>
-                <button type="button" class="btn btn-default" name="3">6-10</button>
-                <button type="button" class="btn btn-default" name="4">&gt; 10</button>
-              </div>
-          </div>  
-          <div class="form-group"> 
-            <label   class="col-xs-4 control-label" >How many years have you lived in this neighborhood?</label>
-              <div id="neighborhoodLivingGroup" class="btn-group nbr-group col-xs-8">
-                <button type="button" class="btn btn-default" name="0">Never</button>
-                <button type="button" class="btn btn-default" name="1">&lt; 1</button>
-                <button type="button" class="btn btn-default" name="2">1-5</button>
-                <button type="button" class="btn btn-default" name="3">6-10</button>
-                <button type="button" class="btn btn-default" name="4">&gt; 10</button>
-              </div>
-          </div>  
-          <div class="form-group"> 
-            <label   class="col-xs-4 control-label" >Describe or share a story about your neighborhood:</label>
-            <div class="col-xs-8">
-            <textarea id="neighborhoodDescription" class="form-control" rows="3"></textarea>
-          </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button id="allSubmitBtn" class="btn btn-success">Save Neighborhood!</button>
-      </div> 
-    </div>
-  </div>
-</div>
-<!--END MODAL-->
-
-<!--download modal-->
-<div id="downloadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-    <div class="modal-content">
-             <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Is this the data you are looking for?</h3>
-      </div>
-      <div class="modal-body">
-        <p>You are about to download the entire neighborhood shapefile. It contains all polygons, including those that have been flagged as junk or inappropriate. Those items can be identified where the flag field=true. There are some great things to map here, so if you get the data, please let us know what you do with it!.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success" id="downloadBtn" >Gimme My Data!</button>
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Never Mind</button>
-      </div>
-           </div>
-  </div>
- </div>
-<!--END MODAL-->
-<img src="img/heart.svg" id="loveIcon" class="loveIcon noMouse"></img>
-
-<div id="map"></div>
-
-<div id="sidebar-wrapper">
-	<ul class="sidebar-nav">
-		<li class="sidebar-brand">
-			<a href="#">
-				Draw Your City!
-			</a>
-		</li>
-		<li>
-			<a href="#">Dashboard</a>
-		</li>
-		<li>
-			<a href="#">Shortcuts</a>
-		</li>
-		<li>
-			<a href="#">Overview</a>
-		</li>
-		<li>
-			<a href="#">Events</a>
-		</li>
-		<li>
-			<a href="#">About</a>
-		</li>
-		<li>
-			<a href="#">Services</a>
-		</li>
-		<li>
-			<a href="#">Contact</a>
-		</li>
-	</ul>
-</div>
-
-<div id="mapmaker">
-  <div  id="btnBar" class="noMouse">
-    <button id="startPolyBtn" class="btn btn-default yesMouse" type="button"> <i class="glyphicon glyphicon-pencil icon-white"> </i> Draw a neighborhood SHAPE</button>
-    <button id="startMarkerBtn" class="btn btn-default yesMouse" type="button"> <i class="glyphicon glyphicon-pushpin icon-white"> </i> Mark a neighborhood POINT</button>
-    <button id="deletePolyBtn" style:""  class="btn btn-default  yesMouse" type="button"> <i class="glyphicon glyphicon-trash icon-white"> </i> Cancel</button>
-    <button id="submitPolyBtn" style="display:none;" class="btn btn-default btn-success  yesMouse" type="button">Save Neighborhood</button>
-  </div>
-</div>
-<div id="mapviewer">
-  <div class="noMouse">
-    <div id="resultBar" class="noMouse viewMap" style="display:none;">
-      <button id="resultsInSpace" class="btn  btn-default details spaceBtn yesMouse" type="button" data-toggle="button" >Show/Hide Base Map</button>
-      
-    </div>
-  </div>
-</div>
-
-<div id="descriptionDiv" class="noMouse vieMap">
-  <div class="panel-group" id="accordion">
-  </div>
-</div>
-<div  style="" class="linksbackground"></div>
-<a style="bottom:60px;" class="link-icons enableTooltipsLeft" title="Information" href="#aboutModal" data-toggle="modal"><i class="glyphicon glyphicon-info-sign"></i></a>
-<!--a style="bottom:60px;" class="link-icons enableTooltipsLeft download-btn" title="Download Data"  ><i class="glyphicon glyphicon-download-alt"></i></a-->
-<a id="githubBtn" style="bottom:40px;" class="link-icons enableTooltipsLeft" title="Get it on GitHub">
-  <img  class="links glyphicon" style="width:15px;height15px;" src="img/GitHub-Mark-32px.png"/>
-</a>
-<a id="twitterbtn" href="http://twitter.com/mjfoster83" style="bottom:20px;" class="link-icons enableTooltipsLeft" title="Mike Foster on Twitter" target="_blank">
-  <img  class="links glyphicon" style="width:15px;height15px;" src="img/bird_black_32_0.png"/>
-</a>
-     <div id="navDiv" class="navbar navbar-inverse navbar-fixed-top" >
-          <ul class="nav navbar-nav" id="mapItMenu">
-                <li style="top:-9px;padding-left:10px;position:relative"><h3 class="navText">{</h3></li>
-                <li id="makeMapModeBtn" class="active mapState"><a href="#make">Make Maps</a></li>
-                <li id="resultMapBtn" class="mapState"><a href="#view">View Maps</a></li>
-                <!--<li><a href="#contact">Contact</a></li>-->
-                <li style="top:-9px;position:relative"><h3 class="navText">}</h3></li>
-                
-                <!--CITY BUTTONS CREATED IN app.js -->
-           </ul>
-<!--            <form class="navbar-right" role="search">
-              <div id="the-basics" style="margin-right: 16px; margin-top: 10px; border-radius: 4px">
-                <input class="typeahead form-control" type="type" placeholder="Zoom to City">
-              </div>
-            </form> -->
-            <ul class="nav navbar-nav navbar-right" id="citiesZoom">
-              <li style="top:-9px;padding-left:10px;position:relative"><h3 class="navText">{</h3></li>
-              <li id="zoomMpls"><a href="#">Minneapolis</a></li>
-              <li style="top:-9px;position:relative"><h3 class="navText">|</h3></li>
-              <li id="zoomStPaul"><a href="#">St. Paul</a></li>
-              <li style="top:-9px;position:relative;margin-right:18px;"><h3 class="navText">}</h3></li>
-            </li>
     </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="libs/bootstrap/js/bootstrap.min.js"></script>
-  <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
-  <script src="js/jquery.slimscroll.min.js"></script>
-  <script src="js/typeahead.min.js"></script>
-  <script src="js/typeahead.jquery.min.js"></script>
-  <script src="bower_components/d3/d3.min.js"></script>
-  <script type="text/javascript" src="bower_components/evispa-timo-jsclipper/clipper.js"></script>
-  <script type="text/javascript" src="bower_components/graham_scan/graham_scan.min.js"></script>
-  <script type="text/javascript" src="bower_components/concavehull/dist/concavehull.min.js"></script>
-  <script src="bower_components/leaflet.freedraw/dist/leaflet.freedraw-src.js"></script>
-  <script src="libs/Leaflet.Editable.js"></script>
-  <script src="js/names.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/googleanalytics.js"></script>
-  
+    <div id="dialog" title="Tell us About this Drawing">     
+      <form>
+        <fieldset style="border: none;">
+          <ul style="list-style-type: none; padding-left: 0px">
+            <li><label for="username">Your Name</label></li>
+            <li><input type="text" name="username" id="username" placeholder="Enter your name" class="text ui-widget-content ui-corner-all"></li>
+            <li><label for="description">About this</label></li>
+            <li><input type="text" name="description" id="description" placeholder="Description for this point" class="text ui-widget-content ui-corner-all"></li>
+          </ul>
+          <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+      </form>
+    </div>
 
-   
-  </script>
-</body>
+    <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+    <script src="http://leaflet.github.io/Leaflet.draw/leaflet.draw.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+    	L.mapbox.accessToken = 'pk.eyJ1IjoibWl0Y2l2aWNkYXRhIiwiYSI6ImNpbDQ0aGR0djN3MGl1bWtzaDZrajdzb28ifQ.quOF41LsLB5FdjnGLwbrrg';
+
+		//TODO: Change to your username, insert function on cartodb, and cartodb tablename
+		var config = {
+			cartoDBusername : "mjfoster83",
+			cartoDBinsertfunction : "insert_crowd_mapping_data",
+			cartoDBtablename : "crowdmap_basic",
+			mapcenter: [42.354865, -71.065840],
+			drawOptions: {
+				position: 'topright',
+				draw : {
+					polygon : true,
+					polyline : true,
+					rectangle : true,
+					/*Circles aren't supported by the GeoJSON spec, so won't get sent to the database properly. 
+					*http://stackoverflow.com/a/16944309/4047679
+					*/
+					circle : false,
+					marker: true
+				},
+				edit : false,
+				remove: false
+			}
+		};
+		
+		var geocoder = L.mapbox.geocoder('mapbox.places');
+		
+		// Basemaps
+		$.getJSON("data/centerlines.geojson",function(data){
+			centerlines = L.mapbox.tileLayer('mitcivicdata.cambridge_streets');
+		});
+		$.getJSON("data/buildings.geojson",function(data){
+			buildings = L.mapbox.tileLayer('mitcivicdata.Basemap');
+		});
+		$.getJSON("data/waterbodies.geojson",function(data){
+			waterbodies = L.mapbox.tileLayer('mitcivicdata.cambridge_hydro');
+		});
+
+		// load GeoJSON from an external file
+		$( "#addStreets" ).click(function() {
+			if(map.hasLayer(centerlines)){
+				map.removeLayer(centerlines);
+			} else {
+				centerlines.addTo(map);
+			};
+		});
+
+		$( "#addBuildings" ).click(function() {
+			if(map.hasLayer(buildings)){
+				map.removeLayer(buildings);
+			} else {
+				buildings.addTo(map);
+			};
+		});
+
+		$( "#addWaterbody" ).click(function() {
+			if(map.hasLayer(waterbodies)){
+				map.removeLayer(waterbodies);
+			} else {
+				waterbodies.addTo(map);
+			};
+		});
+
+
+		// Add Data from CartoDB using the SQL API
+		// Declare Variables
+		// Create Global Variable to hold CartoDB points
+		var cartoDBData = null;
+
+		// Write SQL Selection Query to be Used on CartoDB Table
+		var sqlQuery = "SELECT the_geom, description, name FROM " + config.cartoDBtablename;
+
+
+		// Create Leaflet map object
+		var map = L.map('map', { center: config.mapcenter, zoom: 14, zoomControl: false});
+		// Add Tile Layer basemap
+		// Find your own at https://leaflet-extras.github.io/leaflet-providers/preview/
+		var CartoDB_Positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+			subdomains: 'abcd',
+			maxZoom: 19
+		});
+
+		// CartoDB_Positron.addTo(map);
+
+		//Fetches
+		var getData = "https://" + config.cartoDBusername + ".cartodb.com/api/v2/sql?format=GeoJSON&q=" + sqlQuery;
+
+		function getGeoJSON() {
+			$.getJSON(getData, function (data) {
+				cartoDBData = L.geoJson(data, {
+					onEachFeature: function (feature, layer) {
+						layer.bindPopup('' + feature.properties.description + '<br>Submitted by ' + feature.properties.name + '');
+					}
+				}).addTo(map);
+			});
+		}
+
+		getGeoJSON();
+
+		var drawnItems = new L.FeatureGroup();
+
+		var drawControl = new L.Control.Draw(config.drawOptions);
+		var controlOnMap = false;
+		function startEdits() {
+			if (controlOnMap === true) {
+				map.removeControl(drawControl);
+				controlOnMap = false;
+			}
+			map.addControl(drawControl);
+			controlOnMap = true;
+		}
+		function stopEdits() {
+			map.removeControl(drawControl);
+			controlOnMap = false;
+		}
+		
+		function toggleEdits() {
+			if (controlOnMap === true) {
+				map.removeControl(drawControl);
+				controlOnMap = false;
+			} else {
+				map.addControl(drawControl);
+				controlOnMap = true;
+			}
+		}
+		
+		function drawLine() {
+			new L.Draw.Polyline(map, drawControl.options.polyline).enable();
+		}
+		
+		function drawMarker() {
+			new L.Draw.Marker(map, drawControl.options.marker).enable()
+		}
+		
+		function drawPolygon() {
+			new L.Draw.Polygon(map, drawControl.options.polygon).enable()
+		}
+		
+		function drawRectangle() {
+			new L.Draw.Rectangle(map, drawControl.options.rectangle).enable()
+		}
+		
+		map.on('draw:created', function (e) {
+			var layer = e.layer;
+			map.addLayer(drawnItems);
+			drawnItems.addLayer(layer);
+			dialog.dialog("open");
+		});
+		
+		var dialog = $("#dialog").dialog({
+			autoOpen: false,
+			height: 300,
+			width: 350,
+			modal: true,
+			position: {
+				my: "center center",
+				at: "center center",
+				of: "#map"
+			},
+			buttons: {
+				"Add to Database": setData,
+				Cancel: function () {
+					dialog.dialog("close");
+					refreshLayer();				
+				}
+			},
+			close: function () {
+				form[0].reset();
+				refreshLayer();
+				console.log("Dialog closed");
+			}
+		});
+
+		form = dialog.find("form").on("submit", function (event) {
+			event.preventDefault();
+			setData();
+		});
+
+		function setData() {
+			var enteredUsername = "'" + username.value + "'",
+				enteredDescription = "'" + description.value + "'";
+			drawnItems.eachLayer(function (layer) {
+			//Convert the drawing to a GeoJSON to pass to the CartoDB sql database
+				var drawing = "'" + JSON.stringify(layer.toGeoJSON().geometry) + "'",
+
+				//Construct the SQL query to insert data from the three parameters: the drawing, the input username, and the input description of the drawn shape
+				sql = "SELECT " + config.cartoDBinsertfunction + "(";
+				sql += drawing;
+				sql += "," + enteredDescription;
+				sql += "," + enteredUsername;
+				sql += ");";
+
+				console.log(drawing);
+				console.log(sql);
+
+				//Sending the data
+				$.ajax({
+					type: 'POST',
+					url: 'https://' + config.cartoDBusername + '.cartodb.com/api/v2/sql',
+					crossDomain: true,
+					data: {"q": sql},
+					dataType: 'json',
+					success: function (responseData, textStatus, jqXHR) {
+						console.log("Data saved");
+					},
+					error: function (responseData, textStatus, errorThrown) {
+						console.log("Problem saving the data");
+					}
+				});
+
+				/* 
+				* Transfer submitted drawing to the CartoDB layer, this results in the user's data appearing on the map without
+				* requerying the database (see the refreshLayer() function for an alternate way of doing this) 
+				*/
+				var newData = layer.toGeoJSON();
+				  newData.properties.description = description.value;
+				  newData.properties.name = username.value;
+
+				cartoDBData.addData(newData);
+
+			});
+			
+			dialog.dialog("close");
+		}
+		function refreshLayer() {
+			console.log("drawnItems has been cleared");
+			map.removeLayer(drawnItems);
+			drawnItems = new L.FeatureGroup();
+		/* 
+			This would refresh the data-layer to include new data from the CartoDB table after each drawing is submitted. 
+		*/
+		//      if (map.hasLayer(cartoDBData)) {
+		//        map.removeLayer(cartoDBData);
+		//      };
+		//      getGeoJSON();
+		}
+		
+		new L.Control.Zoom({ position: 'topright' }).addTo(map);
+		
+		$("#menu-toggle").click(function(e) {
+			e.preventDefault();
+			$("#wrapper").toggleClass("toggled");
+		});
+    </script>
+  </body>
 </html>
+
