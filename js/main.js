@@ -313,50 +313,50 @@ $(document).ready(function () {
     getGeoJSON();
 
 
-    $(function() {
-      $('#tooldialog').dialog({
-        position: { my: "right top", at: "right-10 top+10", of: "#map" },
-        width: 200,
-        height: 600,
-        closeOnEscape: false,
-        open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog | ui).hide(); },
-        collapseEnabled: true,
-        beforeCollapse: function(event, ui) {
-          console.log('beforeCollapse');
-        },
-        collapse: function(event, ui) {
-          console.log('collapse');
-        },
-        beforeCollapseRestore: function(event, ui) {
-          console.log('beforeCollapseRestore');
-        },
-        collapseRestore: function(event, ui) {
-          console.log('collapseRestore');
-        }
-      });
-    });
+    // $(function() {
+    //   $('#tooldialog').dialog({
+    //     position: { my: "right top", at: "right-10 top+10", of: "#map" },
+    //     width: 200,
+    //     height: 600,
+    //     closeOnEscape: false,
+    //     open: function(event, ui) { $(".ui-dialog-titlebar-close", ui.dialog | ui).hide(); },
+    //     collapseEnabled: true,
+    //     beforeCollapse: function(event, ui) {
+    //       console.log('beforeCollapse');
+    //     },
+    //     collapse: function(event, ui) {
+    //       console.log('collapse');
+    //     },
+    //     beforeCollapseRestore: function(event, ui) {
+    //       console.log('beforeCollapseRestore');
+    //     },
+    //     collapseRestore: function(event, ui) {
+    //       console.log('collapseRestore');
+    //     }
+    //   });
+    // });
 
 
-    $(function() {
-      var x = 0;
-      $('#questiondialog').dialog({buttons: {
-        Prev: function() {
-            x--; // Increment counter
-            if (x==-1){
-              x=cards.length-1;
-            }
-            $(this).html(cards[x].content); // Build dialog based on new value
-            $(this).dialog("option", "title", cards[x].card);
-          },
-          Next: function() {
-            x++; // Increment counter
-            if (x==cards.length){
-              x=0;
-            }
-            $(this).html(cards[x].content); // Build dialog based on new value
-            $(this).dialog("option", "title", cards[x].card);
-          }}});
-    });
+    // $(function() {
+    //   var x = 0;
+    //   $('#questiondialog').dialog({buttons: {
+    //     Prev: function() {
+    //         x--; // Increment counter
+    //         if (x==-1){
+    //           x=cards.length-1;
+    //         }
+    //         $(this).html(cards[x].content); // Build dialog based on new value
+    //         $(this).dialog("option", "title", cards[x].card);
+    //       },
+    //       Next: function() {
+    //         x++; // Increment counter
+    //         if (x==cards.length){
+    //           x=0;
+    //         }
+    //         $(this).html(cards[x].content); // Build dialog based on new value
+    //         $(this).dialog("option", "title", cards[x].card);
+    //       }}});
+    // });
 
 
   });
