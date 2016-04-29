@@ -1,0 +1,246 @@
+html,body,.container
+{
+    height:100%;
+}
+.container
+{
+    display:table;
+    width: 100%;
+    padding: 0px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.row{
+    height: 100%;
+    display: table-row;
+}
+
+.col-md-3.no-float, .col-md-9.no-float {
+    float: none; /* thanks baxabbit */
+}
+
+.col-md-3 {
+    display: table-cell;
+    background: pink;
+    width: 25%;
+}
+
+.col-md-9
+{
+    display: table-cell;
+    background: yellow;
+    width: 75%;
+}
+
+#map{
+	height: 100vh;
+	width: 100%;
+}
+
+#logo {
+	position: fixed;
+	right: 1em;
+	top: 0.5em;
+	height: 150px;
+
+}
+
+ #map_wrapper { 
+ 	position: relative; 
+ }
+ 
+ #over_map { 
+ 	position: absolute; 
+ 	display: table;
+ 	height: 100%;
+ 	top: 0px; 
+ 	left: 0px; 
+ 	z-index: 99;
+ 	pointer-events: none;
+ }
+
+#info_bar{
+	position: relative;
+	margin-top: 30px;
+	display: table;
+	height: 20%;
+	min-height: 10em; 
+	background:#ff9966;
+	pointer-events: auto;
+
+}
+#tool_bar{
+	position: relative;
+	margin-top:10px;
+	display: table;
+	height: 40%;
+	min-height: 15em;
+	background:#ff9966;
+	pointer-events: auto;
+
+}
+
+#gallery_bar{
+	position: relative;
+	margin-top:10px;
+	display: table;
+	height: 20%;
+	min-height: 10em;
+	background:#ff9966;
+	pointer-events: auto;
+}
+
+#card_view{
+	position: relative;
+	background:#ff9966;
+	margin-top: 30px;
+	height: 20%;
+	width: 400px;
+	display:table;
+	left:-360px;
+	pointer-events: auto;
+
+}
+
+#question_view{
+	position: relative;
+	background:#ff9966;
+	margin-top: 30px;
+	height: 20%;
+	width: 400px;
+	display:table;
+	left:-360px;
+	pointer-events: auto;
+}
+
+
+#tool_view{
+	position: relative;
+	background:#ff9966;
+	margin-top: 10px;
+	height: 40%;
+	width: 400px;
+	display:table;
+	left:-360px;
+	pointer-events: auto;
+
+}
+
+#gallery_view{
+	position: relative;
+	background:#ff9966;
+	margin-top: 10px;
+	height: 20%;
+	width: 400px;
+	display:table;
+	left:-360px;
+	pointer-events: auto;
+
+}
+
+.verticaltab_info{
+	width: 40px; 
+	overflow: hidden;
+	/*height: 150px; */
+}
+
+.verticaltab_info_expanded{
+	width: 400px;
+	overflow: hidden;
+}
+
+.vertical_text {
+	position:absolute;
+	left:5px;
+	bottom:1em;
+	transform: rotate(270deg);
+    -ms-transform: rotate(270deg);/* IE 9 */
+   	-webkit-transform: rotate(270deg); /* Safari */
+	/*transform-origin: right top 0;*/
+	padding: 0px;
+}
+
+.vertical_text_expanded {
+	display: none;
+}
+
+.expand_handle{
+	position:absolute;
+	left:1em;
+	top:.5em;
+}
+
+.expand_handle_expanded{
+	position:relative;
+	float:right;
+	margin-right: 1em;
+	top:.5em;
+}
+
+#createmap_button{
+	position: fixed;
+	height: 20%;
+	max-height: 10em; 
+	width: 10em;
+	background: white;
+	margin-top: 30px;
+	margin-left:10px;
+	border-style: dashed;
+	border-color: #ff9966;
+	border-width: 5px;
+	cursor: pointer;
+	z-index: 9999;
+}
+
+.test_div{
+	position:relative;
+	float:left;
+	width:30px;
+	height:30px;
+	margin: 5px;
+}
+
+.test_div:hover{
+	background-color:#ff8855;
+}
+
+#marker_view{
+	position: relative;
+	margin: 2em;
+}
+
+.markerclass{
+	height: 30px;
+	width: auto;
+	display: block; 
+	margin-left: auto; 
+	margin-right: auto; 
+}
+
+.fixed{
+
+	position:absolute;
+	padding:100px;
+	left:300px;
+	top:100px;
+	width:400px;
+	height:400px;
+	background-color: white;
+}
+
+.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+
+.ui-dialog .ui-dialog-titlebar-collapse,
+.ui-dialog .ui-dialog-titlebar-collapse-restore {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  width: 21px;
+  margin: -10px 0 0 0;
+  padding: 1px;
+  height: 20px;
+}
+

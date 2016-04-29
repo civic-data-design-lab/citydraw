@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CityDraw Icons Prototype</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="http://leaflet.github.io/Leaflet.draw/leaflet.draw.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
+    <script src="https://cdn.rawgit.com/Marko-M/jquery-ui-dialog-collapse/master/js/jquery.ui.dialog-collapse.js"></script> 
+    <script src="js/jquery.slimscroll.js"></script>
+    <script src="js/jquery.slimscroll.min.js"></script>
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/main.js"></script> 
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div id="map"></div>
+                
+                <div>
+                <img id="logo" src="icons/logo.png">
+                </div>
+                    <div id="over_map" >
+
+                    <div id="info_bar" class="verticaltab_info" > 
+                        <a id="info_handle" class="expand_handle" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+                        <div class="vertical_text" style="color:white">INFO</div>
+                    </div>
+
+                    <div id="tool_bar" class="verticaltab_info" > 
+                        <a id="tool_handle" class="expand_handle" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+                        <div class="vertical_text" style="color:white">TOOL</div>
+                    </div>
+
+                    <div id="gallery_bar" class="verticaltab_info" > 
+                        <a id="gallery_handle" class="expand_handle" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+                        <div class="vertical_text" style="color:white">GALL</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+            </div>
+
+
+            <div id="createmap_button" >
+                <i class="fa fa-plus fa-5x" aria-hidden="true"style="color:#ff9966; margin-top:.2em;display:block; width: 100%; text-align: center;" href="#"></i> 
+                <span style="color:#ff9966; margin-top:2em;display:block; width: 100%; text-align: center;font-size: x-small;">CREATE YOUR MAP</span>  
+
+            </div>
+
+            <!-- TOOL BAR -->
+            <div id="tooldialog" title="TOOL BAR">
+                <ul>
+                    <li>
+                        <a href="#" id="drawMarkerButton" title="Click to Start Editing">Draw Marker</a>
+                    </li>
+                    <li>
+                        <a href="#"  id="drawLineButton" title="Click to Start Editing">Draw Polyline</a>
+                    </li>
+                    <!-- <div id="geocoder" class="leaflet-pelias-control leaflet-bar leaflet-control leaflet-pelias-expanded" style="width:263px;"> -->
+                </div>
+            </ul>
+        </div>
+
+       <!-- EXPANDED INFO DIV -->
+        <div id="card_view" class="verticaltab_info_expanded">
+        <a id="info_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+        <div id="card_content"></div>
+        </div>
+
+        <!-- EXPANDED TOOL DIV -->
+        <div id="tool_view" class="verticaltab_info_expanded">
+        <a id="info_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+        <div id="marker_view"></div>
+        </div>
+
+         <!-- EXPANDED GALLERY DIV / GALLERY VIEW-->
+        <div id="gallery_view" class="verticaltab_info_expanded">
+        <a id="info_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+        <p style="color:white; margin:4em">GALLERY ITEMS</p>
+        </div>
+
+
+        <!-- QUESTION MENU -->
+        <div id="questiondialog" title="QUESTIONS"></div>
+
+
+        <!-- ICON MENU -->
+        <div id="icondialog" title="Icon Menu">
+          
+      </div>
+
+      <!-- AFTER DRAWING DIALOG -->
+      <div id="dialog" title="Point Information">     
+          <form>
+            <fieldset style="border: none;">
+              <ul style="list-style-type: none; padding-left: 0px">
+                <li><label for="username">Your Name</label></li>
+                <li><input type="text" name="username" id="username" placeholder="Enter your name" class="text ui-widget-content ui-corner-all"></li>
+                <li><label for="description">About this Point</label></li>
+                <li><input type="text" name="description" id="description" placeholder="Description for this point" class="text ui-widget-content ui-corner-all"></li>
+            </ul>
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+</body>
+
+</html>
