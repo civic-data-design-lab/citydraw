@@ -1,4 +1,6 @@
 <?php
+   header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");//Dont cache
+
 session_cache_limiter('nocache');
 $cache_limiter = session_cache_limiter();
 function goProxy($dataURL) 

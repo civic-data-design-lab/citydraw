@@ -22,13 +22,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
+    <link rel="stylesheet" href="libs/responsive/css/style.css" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
     <script src="https://cdn.rawgit.com/Marko-M/jquery-ui-dialog-collapse/master/js/jquery.ui.dialog-collapse.js"></script> 
     <script src="js/jquery.slimscroll.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
     <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script src="libs/Leaflet.Editable.js"></script>
+    <script src="js/bootstrap.js"></script>
     <script src="js/cards.js"></script>
     <script src="js/main.js"></script> 
+     <script src="libs/responsive/js/jquery.cslide.js"></script>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -56,7 +61,7 @@
                     </div>
 
                     <div id="tool_bar" class="verticaltab_info" > 
-                        <a id="tool_handle" class="expand_handle" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+                        <a id="tool_handle" class="expand_handle" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a> 
                         <div class="vertical_text" style="color:white">TOOL</div>
                     </div>
 
@@ -67,9 +72,7 @@
                 </div>
             </div>
             <div>
-
             </div>
-
 
             <div id="createmap_button" >
                 <i class="fa fa-plus fa-5x" aria-hidden="true"style="color:#ff9966; margin-top:.2em;display:block; width: 100%; text-align: center;" href="#"></i> 
@@ -77,19 +80,8 @@
 
             </div>
 
-            <!-- TOOL BAR -->
-            <div id="tooldialog" title="TOOL BAR">
-                <ul>
-                    <li>
-                        <a href="#" id="drawMarkerButton" title="Click to Start Editing">Draw Marker</a>
-                    </li>
-                    <li>
-                        <a href="#"  id="drawLineButton" title="Click to Start Editing">Draw Polyline</a>
-                    </li>
-                    <!-- <div id="geocoder" class="leaflet-pelias-control leaflet-bar leaflet-control leaflet-pelias-expanded" style="width:263px;"> -->
-                </div>
-            </ul>
-        </div>
+        <!-- GEOCODER -->
+         <!-- <div id="geocoder" class="leaflet-pelias-control leaflet-bar leaflet-control leaflet-pelias-expanded" style="width:263px;"> -->
 
        <!-- EXPANDED INFO DIV -->
         <div id="card_view" class="verticaltab_info_expanded">
@@ -97,27 +89,55 @@
         <div id="card_content"></div>
         </div>
 
-        <!-- EXPANDED TOOL DIV -->
-        <div id="tool_view" class="verticaltab_info_expanded">
-        <a id="info_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
-        <div id="marker_view"></div>
+        <!-- EXPANDED TOOL VIEW DIV -->
+        <div id="tool_view" class="verticaltab_tool_expanded">
+            <a id="tool_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+
+            <div>
+                <p style="font-size:12px; color:white; margin-top:1em; margin-left:1em; margin-bottom:0em">BASEMAP LAYERS</p>
+                <hr style="margin-top:0em; margin-bottom:0em">
+            </div>
+
+            <div style="margin-top:0.5em; margin-left:1em">
+                <a style="color:white;font-size:10px" href="#"><i class="fa fa-road fa-2x" aria-hidden="true"></i>STREET</a>
+                <a style="color:white;font-size:10px; margin-left:1em" href="#"><i class="fa fa-building fa-2x" aria-hidden="true"></i>BUILDING</a>
+                <a style="color:white;font-size:10px; margin-left:1em" href="#"><i class="fa fa-tint fa-2x" aria-hidden="true"></i>WATER</a>
+            </div>
+
+            <div>
+                <p style="font-size:12px; color:white; margin-top:1em; margin-left:1em; margin-bottom:0em">DRAW LINES</p>
+                <hr style="margin-top:0em; margin-bottom:0em">
+            </div>
+            <div style="margin-left:1em;margin-top:0.5em">
+                <a href="#" onclick="drawLine('red')" style="color:red"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="#" onclick="drawLine('blue')" style="color:blue"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="#" onclick="drawLine('green')" style="color:green"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+            </div>
+
+            <div>
+                <p style="font-size:12px; color:white; margin-top:1em; margin-left:1em; margin-bottom:0em">DRAW POLYGON</p>
+                <hr style="margin-top:0em; margin-bottom:0em">
+            </div>
+            <div style="margin-left:1em;margin-top:0.5em">
+                <a  href="#" onclick="drawPolygon('red')" style="color:red"><i class="fa fa-square fa-lg" aria-hidden="true"></i></a>
+                <a href="#" onclick="drawPolygon('blue')" style="color:blue"><i class="fa fa-square fa-lg" aria-hidden="true"></i></a>
+                <a href="#" onclick="drawPolygon('green')" style="color:green"><i class="fa fa-square fa-lg" aria-hidden="true"></i></a>
+            </div>
+            <div>
+                <p style="font-size:12px; color:white; margin-top:1em; margin-left:1em; margin-bottom:0em">PUT AN ICON</p>
+                <hr style="margin-top:0em; margin-bottom:0em">
+            </div>
+
+            <div id="marker_view" style="margin-left:1em;margin-top:0.5em"></div>
+
         </div>
 
          <!-- EXPANDED GALLERY DIV / GALLERY VIEW-->
-        <div id="gallery_view" class="verticaltab_info_expanded">
-        <a id="info_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
+        <div id="gallery_view" class="verticaltab_gallery_expanded">
+        <a id="gallery_handle" class="expand_handle_expanded" href="#" style="color:white"> <i class="fa fa-sort fa-lg fa-rotate-270" aria-hidden="true"></i></a>
         <p style="color:white; margin:4em">GALLERY ITEMS</p>
         </div>
 
-
-        <!-- QUESTION MENU -->
-        <div id="questiondialog" title="QUESTIONS"></div>
-
-
-        <!-- ICON MENU -->
-        <div id="icondialog" title="Icon Menu">
-          
-      </div>
 
       <!-- AFTER DRAWING DIALOG -->
       <div id="dialog" title="Point Information">     
@@ -130,9 +150,34 @@
                 <li><input type="text" name="description" id="description" placeholder="Description for this point" class="text ui-widget-content ui-corner-all"></li>
             </ul>
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
-</div>
+            </fieldset>
+           </form>
+       </div>
+
+<!-- MODAL AFTER SUBMITTING MAP -->
+<div id="aboutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+         <div class="modal-dialog">
+    <div class="modal-content">
+             <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">You have successfully submitted your map!</h3>
+      </div>
+             <div class="modal-body">
+              <h4>This modal can hold "Create PDF" and "Share on Twitter" buttons/options</h4>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+      </div>
+
+        <div class="modal-footer">
+        <!--button class="btn" id="modalInfoBtn">More Info Here</button-->
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Share</button>
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Print</button>
+      </div>
+           </div>
+  </div>
+ </div>
+
+
+
 
 </body>
 

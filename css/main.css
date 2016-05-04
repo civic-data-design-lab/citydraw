@@ -64,10 +64,27 @@ html,body,.container
 	position: relative;
 	margin-top: 30px;
 	display: table;
-	height: 20%;
+	height: 10em;
 	min-height: 10em; 
+	max-height: 10em;
 	background:#ff9966;
 	pointer-events: auto;
+
+
+}
+
+#card_view{
+	position: relative;
+	background:#ff9966;
+	margin-top: 30px;
+	min-height: 10em; 
+	height: 10em;
+	max-height: 10em;
+	width: 400px;
+	display:table;
+	left:-360px;
+	pointer-events: auto;
+	overflow: auto;
 
 }
 #tool_bar{
@@ -91,17 +108,6 @@ html,body,.container
 	pointer-events: auto;
 }
 
-#card_view{
-	position: relative;
-	background:#ff9966;
-	margin-top: 30px;
-	height: 20%;
-	width: 400px;
-	display:table;
-	left:-360px;
-	pointer-events: auto;
-
-}
 
 #question_view{
 	position: relative;
@@ -146,6 +152,16 @@ html,body,.container
 }
 
 .verticaltab_info_expanded{
+	width: 400px;
+	overflow: hidden;
+}
+
+.verticaltab_tool_expanded{
+	width: 400px;
+	overflow: hidden;
+}
+
+.verticaltab_gallery_expanded{
 	width: 400px;
 	overflow: hidden;
 }
@@ -205,10 +221,10 @@ html,body,.container
 	background-color:#ff8855;
 }
 
-#marker_view{
+/* #marker_view{
 	position: relative;
 	margin: 2em;
-}
+} */
 
 .markerclass{
 	height: 30px;
