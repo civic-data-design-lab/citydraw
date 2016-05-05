@@ -96,17 +96,49 @@ $(document).ready(function () {
   //DRAW YOUR MAP
   map = L.map('map', {zoomControl:false} ).setView([42.348898, -71.061330], 16);
 
-   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+/*   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
     maxZoom: 16,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
     'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'mapbox.light'
-  }).addTo(map);
+  }).addTo(map);*/
 
-   // geocoder= L.control.geocoder('search-NdXLorL', {expanded: true}).addTo(map);
-   // var element = geocoder.getContainer();
-   // $("#geocoder").append(element);
+  // BASEMAPS
+  var streets_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_streets.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
+
+  var hydro_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_hydro.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
+
+  var buildings_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_buildings.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
+
+  // load GeoJSON from an external file
+  $( "#toggle_streets" ).click(function() {
+    if(map.hasLayer(streets_base)){
+      map.removeLayer(streets_base);
+    } else {
+      streets_base.addTo(map);
+    };
+  });
+
+  $( "#toggle_buildings" ).click(function() {
+    if(map.hasLayer(buildings_base)){
+      map.removeLayer(buildings_base);
+    } else {
+      buildings_base.addTo(map);
+    };
+  });
+
+  $( "#toggle_hydro" ).click(function() {
+    if(map.hasLayer(hydro_base)){
+      map.removeLayer(hydro_base);
+    } else {
+      hydro_base.addTo(map);
+    };
+  });
+
+  // geocoder= L.control.geocoder('search-NdXLorL', {expanded: true}).addTo(map);
+  // var element = geocoder.getContainer();
+  // $("#geocoder").append(element);
     
   //POPULATE MARKER DIALOG
   var innerHTML="";
