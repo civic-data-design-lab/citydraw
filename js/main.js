@@ -17,7 +17,7 @@ var line = null;
 var polygon= null;
 var guid= null;
 var current_layer = null;
-
+var gallery_map_name =null;
 
 // GET GEOJSON FROM CARTODB DATABASE
 function getGeoJSON(){
@@ -40,6 +40,39 @@ function getGeoJSON(){
       }
     }).addTo(map);
 
+  });
+};
+
+// GET A RANDOM USER MAP 
+function getRandomMap() {
+  var random_map_sqlQuery = "SELECT * FROM data_collector WHERE guid= (SELECT a.guid FROM (SELECT guid, count(*) FROM data_collector group by guid having count(*)>1)a ORDER BY RANDOM() LIMIT 1)"
+
+  console.log("getRandomMap called");
+
+  $.getJSON("https://"+cartoDBUsername+".cartodb.com/api/v2/sql?format=GeoJSON&q="+random_map_sqlQuery, function(data) {
+
+    //gallery_map_name = JSON.stringify(data).map_name;
+     console.log(data.features[0].properties.map_name);
+     $("#gallery_content").html(data.features[0].properties.map_name);
+    
+      cartoDBPoints = L.geoJson(data,{
+     //  onEachFeature: function (feature, layer) {
+     //    console.log(feature.properties.map_name);
+     // },
+      style: function (feature) {
+        return JSON.parse(feature.properties.layer_options);
+      },
+      pointToLayer: function(feature,latlng){
+        var marker = L.marker(latlng,
+        {
+          icon:L.icon({
+           iconUrl: 'icons/marker'+feature.properties.marker_id+'.png'
+         })
+        });
+        marker.bindPopup('<p>' + feature.properties.description + '<br /><em>Submitted by </em>' + feature.properties.name + '</p>');
+        return marker;
+      }
+    }).addTo(map);
   });
 };
 
@@ -104,12 +137,19 @@ $(document).ready(function () {
     id: 'mapbox.light'
   }).addTo(map);*/
 
+
   // BASEMAPS
   var streets_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_streets.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
 
   var hydro_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_hydro.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
 
   var buildings_base = L.mapbox.tileLayer('http://tileserver.graphicarto.com/cambridge_buildings.tilejson', {maxZoom: 15, minZoom: 9, attribution: 'Map data &copy; <a href="http://metrogis.org">MetroGIS</a>, <a href="http://www.graphicarto.com">Mike Foster</a>'});
+
+
+//LOADING BASE MAPS FOR GALLERY RANDOM MAPS
+  streets_base.addTo(map);
+  hydro_base.addTo(map);
+  buildings_base.addTo(map);
 
   // load GeoJSON from an external file
   $( "#toggle_streets" ).click(function() {
@@ -156,6 +196,12 @@ $(document).ready(function () {
   //CALL DRAW POLYGON
   $("#drawPolygonButton").click(function(){
       drawPolygon();
+    });
+
+   //CHANGE MAP - GET A RANDOM MAP
+  $("#change_map").click(function(){
+      refreshLayer();
+      getRandomMap();
     });
 
   // EXPAND INFO VERTICAL TAB_DENEME
@@ -249,6 +295,10 @@ $(document).ready(function () {
          expand("#tool_bar", "#tool_view","#card_view"); 
          $("#card_content").html(info[1].content);
          $("#cslide-slides").cslide();
+         map.removeLayer(streets_base);
+         map.removeLayer(hydro_base);
+         map.removeLayer(buildings_base);
+         refreshLayer();
        });
 
 
@@ -288,8 +338,8 @@ $(document).ready(function () {
       event.preventDefault();
     });
 
-  // GET GEOJSON ONLOAD'TA OLMASI LAZIM KI HARITAYI ACINCA EKLENSIN
-  getGeoJSON();
+  // GET GEOJSON ONLOAD
+  //getGeoJSON();
 
   // DIALOG INPUTS
   function setLayerContent(){
@@ -361,7 +411,7 @@ function refreshLayer() {
   if (map.hasLayer(cartoDBPoints)) {
     map.removeLayer(cartoDBPoints);
   };
-  getGeoJSON();
+  //getGeoJSON();
 };
 
 // SUBMIT TO PROXY
